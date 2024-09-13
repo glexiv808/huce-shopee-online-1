@@ -1,5 +1,6 @@
 package com.huce.shopee_online;
 
+import com.huce.shopee_online.entities.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
