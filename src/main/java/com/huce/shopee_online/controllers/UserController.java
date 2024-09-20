@@ -14,10 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
-
     @Autowired
     private UserService userService;
-
     // Get all users
     @GetMapping
     public ResponseEntity<?> getAllUsers() {
@@ -25,27 +23,37 @@ public class UserController {
                 .body(
                         new ResponseObject(200, "OK",
                                 userService.getAllUsers()));
-
     }
-
     // Get user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new ResponseObject(200, "OK",
+                                userService.getUserById(id)
+                                        .map(ResponseEntity::ok)
+                                        .orElse(ResponseEntity.notFound().build())));
     }
 
     // Create a new user
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new ResponseObject(200, "OK",
+                                userService.createUser(user)));
+
+
     }
 
     // Update user
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        return ResponseEntity.ok(userService.updateUser(id, userDetails));
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        new ResponseObject(200, "OK",
+                                userService.updateUser(id, userDetails)));
+
     }
 
     // Delete user
