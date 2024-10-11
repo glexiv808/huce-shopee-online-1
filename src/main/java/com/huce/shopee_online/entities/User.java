@@ -2,6 +2,9 @@ package com.huce.shopee_online.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -12,10 +15,28 @@ public class User {
     private String phone;
     private String password;
     private boolean active;
+    @OneToMany(mappedBy = "user")
+    private List<CustomerOrder> customerOrders = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private Profile profile;
     public User() {
 
 
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", customerOrders=" + customerOrders +
+                ", profile=" + profile +
+                '}';
     }
 
     public User(Long id, String email, String phone, String password, boolean active) {
