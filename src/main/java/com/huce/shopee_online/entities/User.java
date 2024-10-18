@@ -21,10 +21,7 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile profile;
-    public User() {
 
-
-    }
 
     @Override
     public String toString() {
@@ -39,6 +36,9 @@ public class User {
                 '}';
     }
 
+    public  User(){
+
+    }
     public User(Long id, String email, String phone, String password, boolean active) {
         this.id = id;
         this.email = email;

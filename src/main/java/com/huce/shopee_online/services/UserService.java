@@ -50,7 +50,9 @@ public class UserService {
         //Hash password and compare
         User u = userRepository.findByEmail(userDTO.getEmail());
         if(u != null){
-            if (u.getPassword() == userDTO.getPassword()){
+            if (u.getPassword()
+                    .equals(PasswordEncoder.getInstance()
+                            .encodePassword(userDTO.getPassword()))){
                 return u;
             }
         }

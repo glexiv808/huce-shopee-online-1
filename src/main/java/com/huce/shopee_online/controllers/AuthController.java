@@ -3,6 +3,9 @@ package com.huce.shopee_online.controllers;
 import com.huce.shopee_online.dto.ResponseObject;
 import com.huce.shopee_online.dto.UserDTO;
 import com.huce.shopee_online.entities.User;
+import com.huce.shopee_online.jwt.JwtTokenStore;
+import com.huce.shopee_online.security.PasswordEncoder;
+import com.huce.shopee_online.services.AuthService;
 import com.huce.shopee_online.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-
-
     @Autowired
     UserService userService;
-
+    @Autowired
+    AuthService authService;
 
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody UserDTO user) {
@@ -27,18 +29,18 @@ public class AuthController {
                 .body(
                         new ResponseObject(200, "OK",
                                 userService.signUp(user)));
-
-
     }
 
-    @PostMapping("/signIn")
-    public ResponseEntity<?> signIn(@RequestBody UserDTO user) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(
-                        new ResponseObject(200, "OK",
-                                userService.signIn(user)));
-
+    @PostMapping("/signin")
+    public ResponseEntity<?> signIn(@RequestBody UserDTO userDTO) {
+        User user = userService.userRepository.findByEmail((userDTO.getEmail()));
+        if (user==null || !PasswordEncoder.getInstance().matches(userDTO.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject(201,  "User not found",user));
+        }
+        String token = authService.loginWithEmailAndPassword(userDTO.getEmail(), userDTO.getPassword());
+        JwtTokenStore.getInstance().storeToken(userDTO.getEmail(), token);
+        return ResponseEntity.status(HttpStatus.OK).body
+                (new ResponseObject(200,token,user));
     }
-
-
 }
