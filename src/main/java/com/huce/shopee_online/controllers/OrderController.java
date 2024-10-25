@@ -1,7 +1,7 @@
 package com.huce.shopee_online.controllers;
 
 import com.huce.shopee_online.entities.CustomerOrder;
-import com.huce.shopee_online.services.OrderService;
+import com.huce.shopee_online.services.CustomerOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,31 +11,31 @@ import java.util.List;
 @RequestMapping("/orders")
 public class OrderController {
     @Autowired
-    private OrderService orderService;
+    private CustomerOrderService customerOrderService;
 
     @GetMapping
     public List<CustomerOrder> getAllOrders() {
-        return orderService.getAllOrders();
+        return customerOrderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
     public CustomerOrder getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
+        return customerOrderService.getOrderById(id);
     }
 
     @PostMapping
     public CustomerOrder createOrder(@RequestBody CustomerOrder customerOrder) {
-        return orderService.saveOrder(customerOrder);
+        return customerOrderService.saveOrder(customerOrder);
     }
 
     @PutMapping("/{id}")
     public CustomerOrder updateOrder(@PathVariable Long id, @RequestBody CustomerOrder customerOrder) {
         customerOrder.setId(id);
-        return orderService.saveOrder(customerOrder);
+        return customerOrderService.saveOrder(customerOrder);
     }
 
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
+        customerOrderService.deleteOrder(id);
     }
 }

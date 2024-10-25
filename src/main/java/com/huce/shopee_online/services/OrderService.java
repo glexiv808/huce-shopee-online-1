@@ -1,31 +1,32 @@
 package com.huce.shopee_online.services;
 
-import com.huce.shopee_online.entities.CustomerOrder;
+
+import com.huce.shopee_online.database.SequenceGeneratorService;
+import com.huce.shopee_online.entities.Order;
 import com.huce.shopee_online.repositories.OrderRepository;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class OrderService {
+
     @Autowired
-    private OrderRepository orderRepository;
+    OrderRepository orderRepository;
 
-    public List<CustomerOrder> getAllOrders() {
-        return orderRepository.findAll();
+    @Autowired
+    SequenceGeneratorService sequenceGeneratorService;
+
+
+    public Order insert(Order newOrder){
+        Long id = sequenceGeneratorService
+                .generateSequence(Order.SEQUENCE_NAME);
+        newOrder.setId(id);
+        return orderRepository.insert(newOrder);
+
     }
 
-    public CustomerOrder getOrderById(Long id) {
-        return orderRepository.findById(id).orElse(null);
-    }
-
-    public CustomerOrder saveOrder(CustomerOrder customerOrder) {
-        return orderRepository.save(customerOrder);
-    }
-
-    public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
+    public Order update(Order modifiedOrder){
+        return orderRepository.save(modifiedOrder);
     }
 }
-
