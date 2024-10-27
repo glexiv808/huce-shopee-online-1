@@ -7,6 +7,8 @@ import com.huce.shopee_online.jwt.JwtTokenStore;
 import com.huce.shopee_online.security.PasswordEncoder;
 import com.huce.shopee_online.services.AuthService;
 import com.huce.shopee_online.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
+
 public class AuthController {
+
+
+
     @Autowired
     UserService userService;
     @Autowired
     AuthService authService;
 
+    @Operation(summary = "Get example data")
+    @ApiResponse(responseCode = "200", description = "Successful operation")
     @PostMapping("/signUp")
     public ResponseEntity<?> signUp(@RequestBody UserDTO user) {
         return ResponseEntity.status(HttpStatus.OK)
